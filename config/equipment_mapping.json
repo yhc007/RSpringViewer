@@ -1,0 +1,228 @@
+{
+  "version": "1.0",
+  "line_name": "R_S_LINE_ASSEMBLY",
+  "description": "현대정밀 RSpring 자동화 라인 장비 매핑",
+  "equipment": [
+    {
+      "id": "ROBOT_01",
+      "name": "로봇 #1 (R-2000iC/165F)",
+      "type": "robot",
+      "usd_path": "node_0_3D_R_2000iC_165F_210F_x_t",
+      "plc_tags": {
+        "status": "PLC.ROBOT01.STATUS",
+        "speed_rpm": "PLC.ROBOT01.SPEED",
+        "temperature": "PLC.ROBOT01.TEMP",
+        "torque": "PLC.ROBOT01.TORQUE",
+        "cycle_count": "PLC.ROBOT01.CYCLE_CNT"
+      },
+      "alert_thresholds": {
+        "temperature": { "warning": 60, "critical": 80 },
+        "torque": { "warning": 85, "critical": 95 }
+      }
+    },
+    {
+      "id": "ROBOT_02",
+      "name": "로봇 #2 (R-2000iC/270F)",
+      "type": "robot",
+      "usd_path": "node_0_3D_R_2000iC_270F_v01_x_t",
+      "plc_tags": {
+        "status": "PLC.ROBOT02.STATUS",
+        "speed_rpm": "PLC.ROBOT02.SPEED",
+        "temperature": "PLC.ROBOT02.TEMP",
+        "torque": "PLC.ROBOT02.TORQUE",
+        "cycle_count": "PLC.ROBOT02.CYCLE_CNT"
+      },
+      "alert_thresholds": {
+        "temperature": { "warning": 60, "critical": 80 },
+        "torque": { "warning": 85, "critical": 95 }
+      }
+    },
+    {
+      "id": "DRILL_TAP",
+      "name": "드릴 & 탭 머신",
+      "type": "machine",
+      "usd_path": "node_45_20_100_00_000_DRILL___TAP_MACHINE",
+      "plc_tags": {
+        "status": "PLC.DRILL_TAP.STATUS",
+        "spindle_rpm": "PLC.DRILL_TAP.SPINDLE_RPM",
+        "feed_rate": "PLC.DRILL_TAP.FEED_RATE",
+        "temperature": "PLC.DRILL_TAP.TEMP",
+        "vibration": "PLC.DRILL_TAP.VIBRATION"
+      },
+      "alert_thresholds": {
+        "temperature": { "warning": 55, "critical": 75 },
+        "vibration": { "warning": 1.5, "critical": 2.5 }
+      }
+    },
+    {
+      "id": "CONVEYOR_01",
+      "name": "실린더 바디 컨베이어 #1",
+      "type": "conveyor",
+      "usd_path": "node_45_A01_200_000_000_CYLINDER_BODY_ASSY_CONVEYOR",
+      "plc_tags": {
+        "status": "PLC.CONV01.STATUS",
+        "speed": "PLC.CONV01.SPEED",
+        "motor_current": "PLC.CONV01.MOTOR_AMP",
+        "chain_tension": "PLC.CONV01.CHAIN_TENSION"
+      },
+      "alert_thresholds": {
+        "motor_current": { "warning": 8, "critical": 12 }
+      }
+    },
+    {
+      "id": "CONVEYOR_02",
+      "name": "실린더 바디 컨베이어 #2",
+      "type": "conveyor",
+      "usd_path": "node_45_A01_200_000_000_CYLINDER_BODY_ASSY_CONVEYOR001",
+      "plc_tags": {
+        "status": "PLC.CONV02.STATUS",
+        "speed": "PLC.CONV02.SPEED",
+        "motor_current": "PLC.CONV02.MOTOR_AMP",
+        "chain_tension": "PLC.CONV02.CHAIN_TENSION"
+      },
+      "alert_thresholds": {
+        "motor_current": { "warning": 8, "critical": 12 }
+      }
+    },
+    {
+      "id": "NG_RELEASE_01",
+      "name": "NG 릴리즈 워크테이블 #1",
+      "type": "workstation",
+      "usd_path": "node_45_A01_200_100_A0035_NG_RELEASE_worktable_TOTAL_ASSY",
+      "plc_tags": {
+        "status": "PLC.NG_REL01.STATUS",
+        "ng_count": "PLC.NG_REL01.NG_COUNT",
+        "cylinder_pressure": "PLC.NG_REL01.CYL_PRESS"
+      },
+      "alert_thresholds": {}
+    },
+    {
+      "id": "NG_RELEASE_02",
+      "name": "NG 릴리즈 워크테이블 #2",
+      "type": "workstation",
+      "usd_path": "node_45_A01_200_100_A0035_NG_RELEASE_worktable_TOTAL_ASSY001",
+      "plc_tags": {
+        "status": "PLC.NG_REL02.STATUS",
+        "ng_count": "PLC.NG_REL02.NG_COUNT",
+        "cylinder_pressure": "PLC.NG_REL02.CYL_PRESS"
+      },
+      "alert_thresholds": {}
+    },
+    {
+      "id": "STOPPER_NUT_CONV_01",
+      "name": "스토퍼 너트 컨베이어 #1",
+      "type": "conveyor",
+      "usd_path": "node_45_30_200_A01_000_STOPPER_NUT_CONVEYOR",
+      "plc_tags": {
+        "status": "PLC.SN_CONV01.STATUS",
+        "speed": "PLC.SN_CONV01.SPEED",
+        "motor_current": "PLC.SN_CONV01.MOTOR_AMP"
+      },
+      "alert_thresholds": {}
+    },
+    {
+      "id": "STOPPER_NUT_CONV_02",
+      "name": "스토퍼 너트 컨베이어 #2",
+      "type": "conveyor",
+      "usd_path": "node_45_30_200_A01_000_STOPPER_NUT_CONVEYOR001",
+      "plc_tags": {
+        "status": "PLC.SN_CONV02.STATUS",
+        "speed": "PLC.SN_CONV02.SPEED",
+        "motor_current": "PLC.SN_CONV02.MOTOR_AMP"
+      },
+      "alert_thresholds": {}
+    },
+    {
+      "id": "RECOIL_SPRING",
+      "name": "리코일 스프링 조립",
+      "type": "assembly",
+      "usd_path": "node_45_50_100_00_000_Recoil_spring_assy",
+      "plc_tags": {
+        "status": "PLC.RECOIL.STATUS",
+        "spring_force_n": "PLC.RECOIL.SPRING_FORCE",
+        "press_position": "PLC.RECOIL.PRESS_POS",
+        "cycle_count": "PLC.RECOIL.CYCLE_CNT"
+      },
+      "alert_thresholds": {
+        "spring_force_n": { "warning": 500, "critical": 650 }
+      }
+    },
+    {
+      "id": "SPRING_CONVEYOR",
+      "name": "스프링 컨베이어",
+      "type": "conveyor",
+      "usd_path": "node_45_40_200_000_000_SPRING_CONVEYOR",
+      "plc_tags": {
+        "status": "PLC.SP_CONV.STATUS",
+        "speed": "PLC.SP_CONV.SPEED",
+        "motor_current": "PLC.SP_CONV.MOTOR_AMP"
+      },
+      "alert_thresholds": {}
+    },
+    {
+      "id": "YOKE_CONVEYOR",
+      "name": "요크 컨베이어",
+      "type": "conveyor",
+      "usd_path": "node_45_40_300_A01_000_YOKE_CONVEYOR",
+      "plc_tags": {
+        "status": "PLC.YK_CONV.STATUS",
+        "speed": "PLC.YK_CONV.SPEED",
+        "motor_current": "PLC.YK_CONV.MOTOR_AMP"
+      },
+      "alert_thresholds": {}
+    },
+    {
+      "id": "GANTRY",
+      "name": "갠트리",
+      "type": "gantry",
+      "usd_path": "A1_98_A000_GANTRY",
+      "plc_tags": {
+        "status": "PLC.GANTRY.STATUS",
+        "x_position": "PLC.GANTRY.X_POS",
+        "y_position": "PLC.GANTRY.Y_POS",
+        "z_position": "PLC.GANTRY.Z_POS",
+        "speed": "PLC.GANTRY.SPEED"
+      },
+      "alert_thresholds": {}
+    },
+    {
+      "id": "CONTROL_BOX",
+      "name": "제어반",
+      "type": "control",
+      "usd_path": "node_51_01_100_E01_CONTROL_BOX__2_",
+      "plc_tags": {
+        "status": "PLC.CTRL.STATUS",
+        "cabinet_temp": "PLC.CTRL.CABINET_TEMP"
+      },
+      "alert_thresholds": {
+        "cabinet_temp": { "warning": 40, "critical": 55 }
+      }
+    },
+    {
+      "id": "OPERATE_PANEL",
+      "name": "조작반",
+      "type": "control",
+      "usd_path": "node_51_01_100_E08_OPERATE_ASS_Y001",
+      "plc_tags": {
+        "status": "PLC.OP_PANEL.STATUS"
+      },
+      "alert_thresholds": {}
+    }
+  ],
+  "type_colors": {
+    "robot": "#ff6644",
+    "machine": "#44aaff",
+    "conveyor": "#00ff88",
+    "assembly": "#cc44ff",
+    "workstation": "#ffaa00",
+    "gantry": "#00d4ff",
+    "control": "#888888"
+  },
+  "status_colors": {
+    "running": "#00ff88",
+    "idle": "#ffaa00",
+    "error": "#ff4444",
+    "maintenance": "#8888ff",
+    "offline": "#666666"
+  }
+}

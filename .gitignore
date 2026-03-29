@@ -1,0 +1,16 @@
+# Rust build artifacts
+target/
+
+# Node.js
+node_modules/
+
+# GLB model files (large binary)
+models/*.glb
+static/*.glb
+
+# OS files
+.DS_Store
+
+# Lock files
+Cargo.lock
+package-lock.json

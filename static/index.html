@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSpring 3D Viewer - 현대정밀 자동화 장비 모니터링</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+    <!-- OrbitControls -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- TransformControls for equipment drag-move -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TransformControls.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 헤더 -->
+        <div id="header">
+            <h1>RSPRING <span>3D Viewer &mdash; 현대정밀 자동화 장비 모니터링</span></h1>
+            <div class="header-status">
+                <div class="status-indicator">
+                    <div class="status-dot" id="connection-dot"></div>
+                    <span id="connection-text">연결 대기</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot" id="data-dot"></div>
+                    <span id="data-text">데이터 없음</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 좌측 사이드바 -->
+        <div id="sidebar-left">
+            <div class="panel-title">3D 모델</div>
+            <ul class="model-list" id="model-list">
+                <li class="model-item" style="color:#666;font-size:12px;">로딩 중...</li>
+            </ul>
+
+            <div class="panel-title" style="margin-top:12px;">장비 목록
+                <span id="equipment-count" style="color:#666;font-size:11px;margin-left:6px;"></span>
+            </div>
+            <div id="equipment-list" style="max-height:calc(100vh - 380px);overflow-y:auto;"></div>
+
+            <div class="sim-controls">
+                <div class="panel-title">제어</div>
+                <button class="btn btn-primary" id="btn-simulate" onclick="startSimulation()">시뮬레이션 시작</button>
+                <button class="btn" id="btn-move" onclick="toggleMoveMode()">장비 이동</button>
+                <button class="btn" onclick="clearEquipmentSelection()">선택 해제</button>
+                <button class="btn" onclick="fitAll()">전체 보기</button>
+                <button class="btn" onclick="resetView()">뷰 리셋</button>
+                <button class="btn" onclick="toggleWireframe()">와이어프레임</button>
+                <button class="btn" onclick="toggleExplode()">분해도</button>
+                <div id="move-controls" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #2a2a4a;">
+                    <div style="font-size:11px;color:#00d4ff;margin-bottom:6px;">이동 제어</div>
+                    <button class="btn" onclick="resetEquipmentPosition()" style="font-size:11px;">선택 장비 원위치</button>
+                    <button class="btn" onclick="resetAllPositions()" style="font-size:11px;">전체 원위치</button>
+                    <button class="btn btn-primary" onclick="saveEquipmentPositions()" style="font-size:11px;">위치 저장</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D 뷰포트 -->
+        <div id="viewport">
+            <canvas id="three-canvas"></canvas>
+            <div id="loading-overlay">
+                <div class="loader-ring"></div>
+                <div id="loading-text">초기화 중...</div>
+                <div id="loading-progress"></div>
+            </div>
+            <div class="viewport-controls">
+                <button onclick="setView('front')" title="정면">F</button>
+                <button onclick="setView('top')" title="상면">T</button>
+                <button onclick="setView('right')" title="우측">R</button>
+                <button onclick="setView('iso')" title="등각">I</button>
+                <button onclick="fitAll()" title="전체 보기" style="width:auto;padding:0 10px;font-size:12px;">⊞ Fit</button>
+            </div>
+            <!-- 장비 데이터 오버레이 패널 -->
+            <div id="equipment-overlay" style="display:none;position:absolute;top:60px;right:10px;background:rgba(10,10,30,0.92);border:1px solid #00d4ff;border-radius:8px;padding:12px 16px;min-width:260px;max-width:320px;color:#eee;font-size:13px;z-index:100;pointer-events:auto;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span id="overlay-equip-name" style="font-weight:bold;font-size:14px;color:#00d4ff;">-</span>
+                    <span id="overlay-equip-status" style="padding:2px 8px;border-radius:4px;font-size:11px;background:#333;">-</span>
+                </div>
+                <div id="overlay-equip-type" style="color:#888;font-size:11px;margin-bottom:8px;"></div>
+                <div id="overlay-position"></div>
+                <div id="overlay-sensors" style="margin-bottom:8px;"></div>
+                <div id="overlay-alerts"></div>
+            </div>
+        </div>
+
+        <!-- 우측 사이드바 -->
+        <div id="sidebar-right">
+            <div class="panel-title">실시간 센서 데이터</div>
+            <div id="sensor-cards"></div>
+            <div class="status-panel">
+                <div class="panel-title">시스템 상태</div>
+                <div id="machine-status">
+                    <div class="status-row"><span class="label">장비 ID</span><span class="value" id="val-machine-id">-</span></div>
+                    <div class="status-row"><span class="label">상태</span><span class="value" id="val-status">-</span></div>
+                    <div class="status-row"><span class="label">마지막 갱신</span><span class="value" id="val-timestamp">-</span></div>
+                    <div class="status-row"><span class="label">FPS</span><span class="value" id="val-fps">-</span></div>
+                    <div class="status-row"><span class="label">삼각형 수</span><span class="value" id="val-triangles">-</span></div>
+                    <div class="status-row"><span class="label">장비 수</span><span class="value" id="val-equip-count">-</span></div>
+                    <div class="status-row"><span class="label">메시 그룹</span><span class="value" id="val-group-count">-</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 바 -->
+        <div id="footer">
+            <div class="footer-info">
+                <span>RSpring v0.2.0</span>
+                <span id="footer-renderer">Renderer: -</span>
+                <span id="footer-memory">Memory: -</span>
+            </div>
+            <div><span>&copy; 2026 현대정밀 자동화 장비 모니터링 시스템</span></div>
+        </div>
+    </div>
+    <script src="/js/viewer.js"></script>
+</body>
+</html>
