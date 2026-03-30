@@ -216,11 +216,11 @@ async function testConnection() {
         const result = await response.json();
         
         if (result.success) {
-            document.getElementById('connectionStatus').className = 'status-badge status-connected';
+            document.getElementById('connectionStatus').className = 'status-badge status-connected'; document.getElementById('connectionStatus').innerHTML = '<span class="dot"></span>연결됨';
             document.getElementById('connectionStatus').textContent = '연결됨';
             showToast('PLC 연결 성공!', 'success');
         } else {
-            document.getElementById('connectionStatus').className = 'status-badge status-disconnected';
+            document.getElementById('connectionStatus').className = 'status-badge status-disconnected'; document.getElementById('connectionStatus').innerHTML = '<span class="dot"></span>연결 실패';
             document.getElementById('connectionStatus').textContent = '연결 실패';
             showToast('연결 실패: ' + result.error, 'error');
         }
