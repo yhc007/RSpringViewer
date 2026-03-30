@@ -1,0 +1,437 @@
+[
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_0_3D_R_2000iC_165F_210F_x_t",
+    "name": "node_0_3D_R_2000iC_165F_210F_x_t",
+    "mesh_count": 30
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_20_100_00_000_DRILL___TAP_MACHINE",
+    "name": "node_45_20_100_00_000_DRILL___TAP_MACHINE",
+    "mesh_count": 452
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_A01_200_000_000_CYLINDER_BODY_ASSY_CONVEYOR",
+    "name": "node_45_A01_200_000_000_CYLINDER_BODY_ASSY_CONVEYOR",
+    "mesh_count": 394
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_A01_200_100_A0035_NG_RELEASE_worktable_TOTAL_ASSY",
+    "name": "node_45_A01_200_100_A0035_NG_RELEASE_worktable_TOTAL_ASSY",
+    "mesh_count": 62
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_A01_200_000_000_CYLINDER_BODY_ASSY_CONVEYOR001",
+    "name": "node_45_A01_200_000_000_CYLINDER_BODY_ASSY_CONVEYOR001",
+    "mesh_count": 394
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_30_200_A01_000_STOPPER_NUT_CONVEYOR",
+    "name": "node_45_30_200_A01_000_STOPPER_NUT_CONVEYOR",
+    "mesh_count": 192
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_30_200_A01_000_STOPPER_NUT_CONVEYOR001",
+    "name": "node_45_30_200_A01_000_STOPPER_NUT_CONVEYOR001",
+    "mesh_count": 192
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_0_3D_R_2000iC_270F_v01_x_t",
+    "name": "node_0_3D_R_2000iC_270F_v01_x_t",
+    "mesh_count": 52
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_50_100_00_000_Recoil_spring_assy",
+    "name": "node_45_50_100_00_000_Recoil_spring_assy",
+    "mesh_count": 85
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_40_200_000_000_SPRING_CONVEYOR",
+    "name": "node_45_40_200_000_000_SPRING_CONVEYOR",
+    "mesh_count": 658
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_40_300_A01_000_YOKE_CONVEYOR",
+    "name": "node_45_40_300_A01_000_YOKE_CONVEYOR",
+    "mesh_count": 202
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_51_01_100_E01_CONTROL_BOX__2_",
+    "name": "node_51_01_100_E01_CONTROL_BOX__2_",
+    "mesh_count": 1
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_51_01_100_E08_OPERATE_ASS_Y001",
+    "name": "node_51_01_100_E08_OPERATE_ASS_Y001",
+    "mesh_count": 10
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_0_3D_R_30iB_Plus_B_Cabinet_x_t",
+    "name": "node_0_3D_R_30iB_Plus_B_Cabinet_x_t",
+    "mesh_count": 1
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_0_3D_R_30iB_Plus_B_Cabinet_x_t001",
+    "name": "node_0_3D_R_30iB_Plus_B_Cabinet_x_t001",
+    "mesh_count": 1
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/A1_98_A000_GANTRY",
+    "name": "A1_98_A000_GANTRY",
+    "mesh_count": 142
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body",
+    "name": "node_4737811______00_stp___body",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body001",
+    "name": "node_4737811______00_stp___body001",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body002",
+    "name": "node_4737811______00_stp___body002",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body003",
+    "name": "node_4737811______00_stp___body003",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body004",
+    "name": "node_4737811______00_stp___body004",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body005",
+    "name": "node_4737811______00_stp___body005",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body006",
+    "name": "node_4737811______00_stp___body006",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___",
+    "name": "node_4715704___",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___001",
+    "name": "node_4715704___001",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body007",
+    "name": "node_4737811______00_stp___body007",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___002",
+    "name": "node_4715704___002",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body008",
+    "name": "node_4737811______00_stp___body008",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___003",
+    "name": "node_4715704___003",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body009",
+    "name": "node_4737811______00_stp___body009",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___004",
+    "name": "node_4715704___004",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body010",
+    "name": "node_4737811______00_stp___body010",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___005",
+    "name": "node_4715704___005",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___006",
+    "name": "node_4715704___006",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___007",
+    "name": "node_4715704___007",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___008",
+    "name": "node_4715704___008",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___009",
+    "name": "node_4715704___009",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___010",
+    "name": "node_4715704___010",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___011",
+    "name": "node_4715704___011",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___012",
+    "name": "node_4715704___012",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___013",
+    "name": "node_4715704___013",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715704___014",
+    "name": "node_4715704___014",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___",
+    "name": "node_4707798___",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___001",
+    "name": "node_4707798___001",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___002",
+    "name": "node_4707798___002",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___003",
+    "name": "node_4707798___003",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___004",
+    "name": "node_4707798___004",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___005",
+    "name": "node_4707798___005",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___006",
+    "name": "node_4707798___006",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___007",
+    "name": "node_4707798___007",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___008",
+    "name": "node_4707798___008",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4707798___009",
+    "name": "node_4707798___009",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___",
+    "name": "node_4715703___",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___001",
+    "name": "node_4715703___001",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___002",
+    "name": "node_4715703___002",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___003",
+    "name": "node_4715703___003",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___004",
+    "name": "node_4715703___004",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___005",
+    "name": "node_4715703___005",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___006",
+    "name": "node_4715703___006",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___007",
+    "name": "node_4715703___007",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___008",
+    "name": "node_4715703___008",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4715703___009",
+    "name": "node_4715703___009",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___",
+    "name": "node_4735051___",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___001",
+    "name": "node_4735051___001",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___002",
+    "name": "node_4735051___002",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___003",
+    "name": "node_4735051___003",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___004",
+    "name": "node_4735051___004",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___005",
+    "name": "node_4735051___005",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___006",
+    "name": "node_4735051___006",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___007",
+    "name": "node_4735051___007",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___008",
+    "name": "node_4735051___008",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4735051___009",
+    "name": "node_4735051___009",
+    "mesh_count": 2
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body011",
+    "name": "node_4737811______00_stp___body011",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp___body012",
+    "name": "node_4737811______00_stp___body012",
+    "mesh_count": 15
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_45_A01_200_100_A0035_NG_RELEASE_worktable_TOTAL_ASSY001",
+    "name": "node_45_A01_200_100_A0035_NG_RELEASE_worktable_TOTAL_ASSY001",
+    "mesh_count": 62
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp",
+    "name": "node_4737811______00_stp",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp001",
+    "name": "node_4737811______00_stp001",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp002",
+    "name": "node_4737811______00_stp002",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp003",
+    "name": "node_4737811______00_stp003",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp004",
+    "name": "node_4737811______00_stp004",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp005",
+    "name": "node_4737811______00_stp005",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp006",
+    "name": "node_4737811______00_stp006",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp007",
+    "name": "node_4737811______00_stp007",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp008",
+    "name": "node_4737811______00_stp008",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp009",
+    "name": "node_4737811______00_stp009",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp010",
+    "name": "node_4737811______00_stp010",
+    "mesh_count": 25
+  },
+  {
+    "usd_path": "/World/node_0_045_00_000_000_R_S_LINE_ASSEMBLY/node_4737811______00_stp011",
+    "name": "node_4737811______00_stp011",
+    "mesh_count": 25
+  }
+]

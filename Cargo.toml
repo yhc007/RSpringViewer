@@ -1,8 +1,8 @@
 [package]
 name = "rspring-viewer"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
-description = "RSpring 3D CAD Viewer - 현대정밀 자동화 장비 실시간 모니터링"
+description = "RSpring 3D CAD Viewer + AAS Integration"
 
 [dependencies]
 axum = { version = "0.7", features = ["multipart"] }
@@ -15,3 +15,4 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 uuid = { version = "1", features = ["v4"] }
 chrono = { version = "0.4", features = ["serde"] }
+reqwest = { version = "0.12", features = ["json"] }

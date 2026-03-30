@@ -567,6 +567,11 @@ function selectEquipment(equipConfig) {
     
     // Fetch and display equipment data
     fetchEquipmentData(equipConfig.id);
+    
+    // AAS 정보 조회
+    if (typeof fetchAasForEquipment === "function") {
+        fetchAasForEquipment(equipConfig.id);
+    }
 }
 
 function clearEquipmentSelection() {

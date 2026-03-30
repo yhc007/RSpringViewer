@@ -12,13 +12,13 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <!-- TransformControls for equipment drag-move -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TransformControls.js"></script>
-</head>
+<script src="/js/aas-integration.js"></script></head>
 <body>
     <div id="app">
         <!-- 헤더 -->
         <div id="header">
             <h1>RSPRING <span>3D Viewer &mdash; 현대정밀 자동화 장비 모니터링</span></h1>
-            <div class="header-status">
+            <a href="/settings.html" style="background:#4CAF50;color:white;padding:8px 16px;border-radius:4px;text-decoration:none;margin-right:15px;">⚙️ PLC 설정</a><div class="header-status">
                 <div class="status-indicator">
                     <div class="status-dot" id="connection-dot"></div>
                     <span id="connection-text">연결 대기</span>
@@ -40,7 +40,7 @@
             <div class="panel-title" style="margin-top:12px;">장비 목록
                 <span id="equipment-count" style="color:#666;font-size:11px;margin-left:6px;"></span>
             </div>
-            <div id="equipment-list" style="max-height:calc(100vh - 380px);overflow-y:auto;"></div>
+            <div class="panel-title" style="margin-top:12px;">🏭 AAS</div><div id="aas-list" style="max-height:150px;overflow-y:auto;margin-bottom:8px;"></div><div class="panel-title" style="margin-top:12px;">장비 목록</div><div id="equipment-list" style="max-height:calc(100vh - 380px);overflow-y:auto;"></div>
 
             <div class="sim-controls">
                 <div class="panel-title">제어</div>
@@ -84,7 +84,7 @@
                 <div id="overlay-equip-type" style="color:#888;font-size:11px;margin-bottom:8px;"></div>
                 <div id="overlay-position"></div>
                 <div id="overlay-sensors" style="margin-bottom:8px;"></div>
-                <div id="overlay-alerts"></div>
+                <div id="overlay-alerts"></div><div id="overlay-aas"></div>
             </div>
         </div>
 
