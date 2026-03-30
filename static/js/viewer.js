@@ -149,10 +149,102 @@ function setupHelpers() {
     gridHelper.position.y = 0;
     scene.add(gridHelper);
     
-    // Axes helper (small, in corner)
-    const axesHelper = new THREE.AxesHelper(5);
-    axesHelper.position.set(-20, 0, -20);
-    scene.add(axesHelper);
+    // Axes helper with labels
+    createLabeledAxes(8);
+}
+
+// Create labeled axes with RGB colors (X=Red, Y=Green, Z=Blue)
+function createLabeledAxes(size) {
+    const axesGroup = new THREE.Group();
+    axesGroup.name = 'axesHelper';
+    
+    // Axis colors: X=Red, Y=Green, Z=Blue (RGB order)
+    const colors = {
+        x: 0xff0000,  // Red
+        y: 0x00ff00,  // Green
+        z: 0x0000ff   // Blue
+    };
+    
+    // Create axis lines
+    const createAxisLine = (dir, color) => {
+        const material = new THREE.LineBasicMaterial({ color: color, linewidth: 2 });
+        const points = [
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(dir.x * size, dir.y * size, dir.z * size)
+        ];
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        return new THREE.Line(geometry, material);
+    };
+    
+    // X axis (Red)
+    axesGroup.add(createAxisLine({x: 1, y: 0, z: 0}, colors.x));
+    // Y axis (Green)
+    axesGroup.add(createAxisLine({x: 0, y: 1, z: 0}, colors.y));
+    // Z axis (Blue)
+    axesGroup.add(createAxisLine({x: 0, y: 0, z: 1}, colors.z));
+    
+    // Create arrow cones
+    const createArrowCone = (position, rotation, color) => {
+        const coneGeom = new THREE.ConeGeometry(0.15, 0.5, 8);
+        const coneMat = new THREE.MeshBasicMaterial({ color: color });
+        const cone = new THREE.Mesh(coneGeom, coneMat);
+        cone.position.copy(position);
+        cone.rotation.set(rotation.x, rotation.y, rotation.z);
+        return cone;
+    };
+    
+    // Arrow cones at axis ends
+    axesGroup.add(createArrowCone(
+        new THREE.Vector3(size, 0, 0), 
+        {x: 0, y: 0, z: -Math.PI/2}, 
+        colors.x
+    ));
+    axesGroup.add(createArrowCone(
+        new THREE.Vector3(0, size, 0), 
+        {x: 0, y: 0, z: 0}, 
+        colors.y
+    ));
+    axesGroup.add(createArrowCone(
+        new THREE.Vector3(0, 0, size), 
+        {x: Math.PI/2, y: 0, z: 0}, 
+        colors.z
+    ));
+    
+    // Create text labels using sprites
+    const createLabel = (text, position, color) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 64;
+        canvas.height = 64;
+        
+        ctx.fillStyle = '#' + color.toString(16).padStart(6, '0');
+        ctx.font = 'bold 48px Inter, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, 32, 32);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        const spriteMat = new THREE.SpriteMaterial({ 
+            map: texture, 
+            transparent: true,
+            depthTest: false
+        });
+        const sprite = new THREE.Sprite(spriteMat);
+        sprite.position.copy(position);
+        sprite.scale.set(1.5, 1.5, 1);
+        return sprite;
+    };
+    
+    // Add labels
+    axesGroup.add(createLabel('X', new THREE.Vector3(size + 1, 0, 0), colors.x));
+    axesGroup.add(createLabel('Y', new THREE.Vector3(0, size + 1, 0), colors.y));
+    axesGroup.add(createLabel('Z', new THREE.Vector3(0, 0, size + 1), colors.z));
+    
+    // Position in corner of scene
+    axesGroup.position.set(-20, 0, -20);
+    scene.add(axesGroup);
+    
+    console.log('✅ Labeled axes created (X=Red, Y=Green, Z=Blue)');
 }
 
 // =============================================================================
