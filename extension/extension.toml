@@ -1,0 +1,16 @@
+[package]
+title = "AAS Integration"
+description = "Asset Administration Shell integration for Omniverse - View AAS data for selected USD prims"
+version = "1.0.0"
+category = "Digital Twin"
+keywords = ["aas", "digital twin", "industry 4.0", "asset administration shell"]
+authors = ["Paul Yu"]
+repository = "https://github.com/yhc007/omniverse-aas"
+
+[dependencies]
+"omni.ui" = {}
+"omni.usd" = {}
+"omni.kit.commands" = {}
+
+[[python.module]]
+name = "omni.aas"
