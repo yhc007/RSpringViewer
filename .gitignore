@@ -4,8 +4,7 @@ target/
 # Node.js
 node_modules/
 
-# GLB model files (large binary)
-models/*.glb
+# GLB model files (static/ only; models/*.glb tracked via Git LFS)
 static/*.glb
 
 # OS files
