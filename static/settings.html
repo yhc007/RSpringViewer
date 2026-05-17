@@ -427,6 +427,13 @@
                         <input type="text" id="equipmentId" placeholder="예: CNC001">
                     </div>
                     <div class="form-group">
+                        <label>라인 (Kafka 토픽)</label>
+                        <select id="line">
+                            <option value="1">Line 1 — melsec-plc-data-1</option>
+                            <option value="2">Line 2 — melsec-plc-data-2</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>PLC IP 주소</label>
                         <input type="text" id="plcIp" placeholder="192.168.1.100">
                     </div>
@@ -468,19 +475,20 @@
                 <h2>메모리 주소 매핑</h2>
             </div>
             <div class="card-body">
-                <p class="card-description">PLC 메모리 주소를 AAS Submodel 속성에 매핑합니다. 지원 디바이스: D, W, R, M, X, Y, B</p>
-                
+                <p class="card-description">PLC 메모리 주소를 뷰어 센서 슬롯과 AAS Submodel 속성에 매핑합니다. <b>센서 이름</b>이 비어 있으면 Kafka 라우팅 대상 아님(AAS 전용). 지원 디바이스: D, W, R, M, X, Y, B</p>
+
                 <div class="mapping-table-container">
                     <table class="mapping-table" id="mappingTable">
                         <thead>
                             <tr>
-                                <th style="width:14%">디바이스</th>
-                                <th style="width:12%">데이터 타입</th>
-                                <th style="width:20%">AAS Submodel</th>
-                                <th style="width:20%">AAS Property</th>
-                                <th style="width:12%">스케일</th>
-                                <th style="width:12%">오프셋</th>
-                                <th style="width:10%">액션</th>
+                                <th style="width:12%">디바이스</th>
+                                <th style="width:14%">센서 이름</th>
+                                <th style="width:10%">데이터 타입</th>
+                                <th style="width:16%">AAS Submodel</th>
+                                <th style="width:16%">AAS Property</th>
+                                <th style="width:10%">스케일</th>
+                                <th style="width:10%">오프셋</th>
+                                <th style="width:12%">액션</th>
                             </tr>
                         </thead>
                         <tbody id="mappingBody">

@@ -1,0 +1,58 @@
+# PLC → AAS Bridge 설정
+# 장비: DRILL_TAP
+line = 1
+
+[plc]
+ip = "192.168.0.10"
+port = 4999
+network = 0
+pc = 255
+interval_ms = 1000
+
+[aas]
+server = "http://localhost:8080"
+
+[[mappings]]
+device = "D1002"
+sensor_name = "cycle_time_raw"
+aas_submodel = "OperationalData"
+aas_property = "CycleTimeRaw"
+data_type = "int16"
+scale = 0.1
+offset = 0.0
+
+[[mappings]]
+device = "D1004"
+sensor_name = "total_production"
+aas_submodel = "OperationalData"
+aas_property = "TotalProduction"
+data_type = "int16"
+scale = 1.0
+offset = 0.0
+
+[[mappings]]
+device = "D1006"
+sensor_name = "daily_production"
+aas_submodel = "OperationalData"
+aas_property = "DailyProduction"
+data_type = "int16"
+scale = 1.0
+offset = 0.0
+
+[[mappings]]
+device = "D1014"
+sensor_name = "main_table_scale"
+aas_submodel = "OperationalData"
+aas_property = "MainTableScale"
+data_type = "int16"
+scale = 1.0
+offset = 0.0
+
+[[mappings]]
+device = "D1016"
+sensor_name = "spindle_rpm"
+aas_submodel = "OperationalData"
+aas_property = "SpindleRPM"
+data_type = "int16"
+scale = 1.0
+offset = 0.0

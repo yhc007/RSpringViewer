@@ -13,6 +13,7 @@ let simulationActive = false;
 let clock;
 let equipmentMapping = null;
 let equipmentGroups = {};  // { usd_path: [mesh1, mesh2, ...] }
+let equipmentLineMap = {}; // { equipment_id: line_number } — PLC 설정에서 가져온 라인 할당
 let selectedEquipment = null;
 let pollingInterval = null;
 let sensorHistory = {};
@@ -542,51 +543,87 @@ function applyDefaultTypeColors() {
 }
 
 function loadEquipmentMapping() {
-    return fetch('/api/equipment/mapping')
-        .then(res => res.json())
-        .then(data => {
-            equipmentMapping = data;
-            populateEquipmentList();
-            
-            // Update equipment count
-            const ecEl = document.getElementById('equipment-count') || document.getElementById('equip-count');
-            if (ecEl) ecEl.textContent = '(' + data.equipment.length + ')';
-            const vecEl = document.getElementById('val-equip-count');
-            if (vecEl) vecEl.textContent = data.equipment.length;
-            
-            return data;
-        })
-        .catch(err => {
-            console.error('Error loading equipment mapping:', err);
-            equipmentMapping = { equipment: [] };
+    return Promise.all([
+        fetch('/api/equipment/mapping').then(res => res.json()).catch(() => ({ equipment: [] })),
+        fetch('/api/plc/configs').then(res => res.json()).catch(() => [])
+    ]).then(([mapping, plcConfigs]) => {
+        equipmentMapping = mapping;
+
+        // PLC 설정의 line을 장비 ID 별로 인덱싱
+        equipmentLineMap = {};
+        (plcConfigs || []).forEach(c => {
+            if (c.equipment_id) equipmentLineMap[c.equipment_id] = c.line ?? 1;
         });
+
+        populateEquipmentList();
+
+        const ecEl = document.getElementById('equipment-count') || document.getElementById('equip-count');
+        if (ecEl) ecEl.textContent = '(' + (mapping.equipment || []).length + ')';
+        const vecEl = document.getElementById('val-equip-count');
+        if (vecEl) vecEl.textContent = (mapping.equipment || []).length;
+
+        return mapping;
+    });
 }
 
 function populateEquipmentList() {
     const equipmentList = document.getElementById('equipment-list');
     equipmentList.innerHTML = '';
-    
+
     if (!equipmentMapping || !equipmentMapping.equipment) return;
-    
+
+    // 장비를 라인별로 그룹핑. 매핑 없는 장비는 0(미지정)으로.
+    const byLine = new Map();
     equipmentMapping.equipment.forEach(equip => {
-        const div = document.createElement('div');
-        div.className = 'equipment-item';
-        
-        const meshCount = equipmentGroups[equip.usd_path] 
-            ? equipmentGroups[equip.usd_path].length 
-            : 0;
-        
-        const typeColor = TYPE_COLORS[equip.type] || 0x888888;
-        const colorHex = '#' + typeColor.toString(16).padStart(6, '0');
-        
-        div.innerHTML = `
-            <span class="equip-dot" style="background-color: ${colorHex};"></span>
-            <span class="equip-name">${equip.name}</span>
-            <span class="equip-count">${meshCount}</span>
+        const line = equipmentLineMap[equip.id] ?? 0;
+        if (!byLine.has(line)) byLine.set(line, []);
+        byLine.get(line).push(equip);
+    });
+
+    // 정렬: 미지정(0)은 가장 아래
+    const lineKeys = [...byLine.keys()].sort((a, b) => {
+        if (a === 0) return 1;
+        if (b === 0) return -1;
+        return a - b;
+    });
+
+    lineKeys.forEach(line => {
+        const items = byLine.get(line);
+
+        // 섹션 헤더
+        const header = document.createElement('div');
+        header.className = 'line-section-header';
+        const labelText = line === 0 ? '미지정' : `LINE ${String(line).padStart(2, '0')}`;
+        const badgeText = line === 0 ? '–' : String(line).padStart(2, '0');
+        header.innerHTML = `
+            <span class="line-badge${line === 0 ? ' line-badge-muted' : ''}">${badgeText}</span>
+            <span class="line-label">${labelText}</span>
+            <span class="line-count">${items.length}</span>
         `;
-        
-        div.onclick = () => selectEquipment(equip);
-        equipmentList.appendChild(div);
+        equipmentList.appendChild(header);
+
+        // 항목들
+        items.forEach(equip => {
+            const div = document.createElement('div');
+            div.className = 'equipment-item';
+            div.dataset.equipId = equip.id;
+
+            const meshCount = equipmentGroups[equip.usd_path]
+                ? equipmentGroups[equip.usd_path].length
+                : 0;
+
+            const typeColor = TYPE_COLORS[equip.type] || 0x888888;
+            const colorHex = '#' + typeColor.toString(16).padStart(6, '0');
+
+            div.innerHTML = `
+                <span class="equip-dot" style="background-color: ${colorHex};"></span>
+                <span class="equip-name">${equip.name}</span>
+                <span class="equip-count">${meshCount}</span>
+            `;
+
+            div.onclick = () => selectEquipment(equip);
+            equipmentList.appendChild(div);
+        });
     });
 }
 

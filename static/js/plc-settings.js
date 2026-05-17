@@ -2,6 +2,7 @@
 
 let currentConfig = {
     equipmentId: '',
+    line: 1,
     plc: {
         ip: '',
         port: 4999,
@@ -28,11 +29,24 @@ async function loadEquipmentList() {
             const configs = await response.json();
             const select = document.getElementById('equipmentSelect');
             select.innerHTML = '<option value="">-- 장비를 선택하세요 --</option>';
-            configs.forEach(config => {
-                const option = document.createElement('option');
-                option.value = config.equipment_id;
-                option.textContent = `${config.equipment_id} (${config.plc.ip})`;
-                select.appendChild(option);
+
+            // 라인별 <optgroup>으로 묶어 표시
+            const byLine = new Map();
+            configs.forEach(c => {
+                const line = c.line ?? 1;
+                if (!byLine.has(line)) byLine.set(line, []);
+                byLine.get(line).push(c);
+            });
+            [...byLine.keys()].sort((a, b) => a - b).forEach(line => {
+                const og = document.createElement('optgroup');
+                og.label = `Line ${line}`;
+                byLine.get(line).forEach(config => {
+                    const option = document.createElement('option');
+                    option.value = config.equipment_id;
+                    option.textContent = `${config.equipment_id} (${config.plc.ip})`;
+                    og.appendChild(option);
+                });
+                select.appendChild(og);
             });
         }
     } catch (error) {
@@ -66,6 +80,7 @@ async function loadEquipmentConfig() {
 function createNewConfig() {
     currentConfig = {
         equipmentId: '',
+        line: 1,
         plc: {
             ip: '',
             port: 4999,
@@ -85,7 +100,8 @@ function createNewConfig() {
 
 // 폼에 값 채우기
 function populateForm(config) {
-    document.getElementById('equipmentId').value = config.equipmentId || '';
+    document.getElementById('equipmentId').value = config.equipment_id || config.equipmentId || '';
+    document.getElementById('line').value = String(config.line ?? 1);
     document.getElementById('plcIp').value = config.plc?.ip || '';
     document.getElementById('plcPort').value = config.plc?.port || 4999;
     document.getElementById('pollInterval').value = config.plc?.interval_ms || 1000;
@@ -109,6 +125,7 @@ function addMappingRow(mapping = null) {
     
     row.innerHTML = `
         <td><input type="text" class="mapping-device" placeholder="D1000" value="${mapping?.device || ''}"></td>
+        <td><input type="text" class="mapping-sensor" placeholder="spindle_rpm" value="${mapping?.sensor_name || ''}"></td>
         <td>
             <select class="mapping-type">
                 <option value="int16" ${mapping?.data_type === 'int16' ? 'selected' : ''}>int16</option>
@@ -137,6 +154,7 @@ function collectFormData() {
         if (device) {
             mappings.push({
                 device: device,
+                sensor_name: row.querySelector('.mapping-sensor').value.trim(),
                 data_type: row.querySelector('.mapping-type').value,
                 aas_submodel: row.querySelector('.mapping-submodel').value.trim(),
                 aas_property: row.querySelector('.mapping-property').value.trim(),
@@ -149,6 +167,7 @@ function collectFormData() {
 
     return {
         equipment_id: document.getElementById('equipmentId').value.trim(),
+        line: parseInt(document.getElementById('line').value) || 1,
         plc: {
             ip: document.getElementById('plcIp').value.trim(),
             port: parseInt(document.getElementById('plcPort').value) || 4999,
@@ -235,6 +254,7 @@ function exportConfig() {
     
     let toml = `# PLC → AAS Bridge 설정
 # 장비: ${config.equipment_id}
+line = ${config.line}
 
 [plc]
 ip = "${config.plc.ip}"
@@ -251,6 +271,7 @@ server = "${config.aas.server}"
     config.mappings.forEach(m => {
         toml += `[[mappings]]
 device = "${m.device}"
+sensor_name = "${m.sensor_name || ''}"
 aas_submodel = "${m.aas_submodel}"
 aas_property = "${m.aas_property}"
 data_type = "${m.data_type}"

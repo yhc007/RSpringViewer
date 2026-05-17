@@ -1,0 +1,24 @@
+# PLC → AAS Bridge 설정
+# 장비: YOKE_CONVEYOR
+line = 2
+
+[plc]
+ip = "192.168.21.114"
+port = 5010
+network = 0
+pc = 255
+interval_ms = 1000
+
+[aas]
+server = "http://localhost:8080"
+
+[[mappings]]
+device = "D1002"
+sensor_name = "inverter_freq_hz"
+aas_submodel = "OperationalData"
+aas_property = "InverterFrequency"
+data_type = "int16"
+scale = 0.01
+offset = 0
+
+

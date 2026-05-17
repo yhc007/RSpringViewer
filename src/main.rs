@@ -6,10 +6,14 @@ use axum::{
     Json, Router,
 };
 use chrono::Utc;
+use rdkafka::config::ClientConfig;
+use rdkafka::consumer::{Consumer, StreamConsumer};
+use rdkafka::message::Message;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::sync::Arc;
+use std::time::Duration;
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
 use tower_http::cors::{CorsLayer, Any};
@@ -68,7 +72,34 @@ pub struct AppState {
     pub sensor_data: Arc<RwLock<Vec<SensorData>>>,
     pub equipment_data: Arc<RwLock<HashMap<String, EquipmentData>>>,
     pub equipment_positions: Arc<RwLock<HashMap<String, PositionOffset>>>,
+    pub address_map: Arc<RwLock<AddressMap>>,
     pub aas_server_url: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct MappingEntry {
+    pub equipment_id: String,
+    pub sensor_name: String,
+    pub scale: f64,
+    pub offset: f64,
+}
+
+/// (라인 번호, PLC 주소) → 매핑. 같은 주소가 라인별로 다른 의미를 가질 수 있어 라인을 키에 포함.
+pub type AddressMap = HashMap<(u8, String), MappingEntry>;
+
+#[derive(Debug, Deserialize)]
+struct RawWordData {
+    address: String,
+    value: i32,
+    #[serde(default)]
+    #[allow(dead_code)]
+    hex: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct RawPlcMessage {
+    timestamp: chrono::DateTime<chrono::Utc>,
+    word_data: Vec<RawWordData>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -98,12 +129,37 @@ async fn main() {
     // AAS 서버 URL (같은 서버의 8080 포트)
     let aas_url = std::env::var("AAS_SERVER_URL").unwrap_or_else(|_| "http://localhost:8080".to_string());
 
+    // PLC 주소 → (장비, 센서) 매핑 인덱스 빌드
+    let initial_map = build_address_map();
+    println!("📋 PLC address map loaded: {} entries", initial_map.len());
+
     let state = AppState {
         sensor_data: Arc::new(RwLock::new(Vec::new())),
         equipment_data: Arc::new(RwLock::new(HashMap::new())),
         equipment_positions: Arc::new(RwLock::new(saved_positions)),
+        address_map: Arc::new(RwLock::new(initial_map)),
         aas_server_url: aas_url.clone(),
     };
+
+    // Kafka consumer spawn — 라인별 토픽 ({prefix}-{line})을 한 컨슈머가 모두 구독
+    let kafka_brokers = std::env::var("KAFKA_BROKERS").unwrap_or_else(|_| "localhost:9092".to_string());
+    let kafka_prefix = std::env::var("KAFKA_TOPIC_PREFIX").unwrap_or_else(|_| "melsec-plc-data".to_string());
+    let kafka_lines: Vec<u8> = std::env::var("KAFKA_LINES")
+        .unwrap_or_else(|_| "1,2".to_string())
+        .split(',')
+        .filter_map(|s| s.trim().parse::<u8>().ok())
+        .collect();
+    let kafka_group = std::env::var("KAFKA_GROUP_ID").unwrap_or_else(|_| "rspring-viewer".to_string());
+    let kafka_topics: Vec<String> = kafka_lines.iter().map(|l| format!("{}-{}", kafka_prefix, l)).collect();
+    {
+        let state_clone = state.clone();
+        let brokers = kafka_brokers.clone();
+        let topics = kafka_topics.clone();
+        let group = kafka_group.clone();
+        tokio::spawn(async move {
+            run_kafka_consumer(state_clone, brokers, topics, group).await;
+        });
+    }
 
     let cors = CorsLayer::new()
         .allow_origin(Any)
@@ -149,6 +205,7 @@ async fn main() {
     println!("🚀 RSpring Viewer v0.2.0 starting at http://0.0.0.0:{}", port);
     println!("📁 Models: models/  Config: config/  Static: static/");
     println!("🔗 AAS Server: {}", aas_url);
+    println!("🔗 Kafka: brokers={} topics={:?} group={}", kafka_brokers, kafka_topics, kafka_group);
     
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
@@ -428,11 +485,16 @@ async fn list_models() -> impl IntoResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PlcConfig {
     pub equipment_id: String,
+    /// 어느 생산 라인(=Kafka 토픽)에 속하는 장비인지. 토픽 = `{KAFKA_TOPIC_PREFIX}-{line}`.
+    #[serde(default = "default_line")]
+    pub line: u8,
     pub plc: PlcConnectionConfig,
     pub aas: AasConfig,
     #[serde(default)]
     pub mappings: Vec<PlcMapping>,
 }
+
+fn default_line() -> u8 { 1 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PlcConnectionConfig {
@@ -457,7 +519,12 @@ pub struct AasConfig {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PlcMapping {
     pub device: String,
+    /// 뷰어 equipment_data.sensors 슬롯 키. 빈 문자열이면 Kafka 라우팅 대상 아님 (AAS 전용).
+    #[serde(default)]
+    pub sensor_name: String,
+    #[serde(default)]
     pub aas_submodel: String,
+    #[serde(default)]
     pub aas_property: String,
     #[serde(default = "default_data_type")]
     pub data_type: String,
@@ -510,17 +577,20 @@ async fn get_plc_config(Path(id): Path<String>) -> impl IntoResponse {
 }
 
 // PLC 설정 저장
-async fn save_plc_config(Json(config): Json<PlcConfig>) -> impl IntoResponse {
+async fn save_plc_config(State(state): State<AppState>, Json(config): Json<PlcConfig>) -> impl IntoResponse {
     let _ = std::fs::create_dir_all("config/plc");
     let path = format!("config/plc/{}.json", config.equipment_id);
-    
+
     match std::fs::write(&path, serde_json::to_string_pretty(&config).unwrap_or_default()) {
         Ok(_) => {
             // TOML 파일도 생성
             let toml_path = format!("config/plc/{}.toml", config.equipment_id);
             let toml_content = generate_toml(&config);
             let _ = std::fs::write(&toml_path, toml_content);
-            
+
+            // 매핑 인덱스 갱신
+            *state.address_map.write().await = build_address_map();
+
             println!("💾 PLC config saved: {}", config.equipment_id);
             (StatusCode::OK, Json(json!({"success": true, "equipment_id": config.equipment_id})))
         }
@@ -531,14 +601,15 @@ async fn save_plc_config(Json(config): Json<PlcConfig>) -> impl IntoResponse {
 }
 
 // PLC 설정 삭제
-async fn delete_plc_config(Path(id): Path<String>) -> impl IntoResponse {
+async fn delete_plc_config(State(state): State<AppState>, Path(id): Path<String>) -> impl IntoResponse {
     let json_path = format!("config/plc/{}.json", id);
     let toml_path = format!("config/plc/{}.toml", id);
-    
+
     let json_deleted = std::fs::remove_file(&json_path).is_ok();
     let _ = std::fs::remove_file(&toml_path);
-    
+
     if json_deleted {
+        *state.address_map.write().await = build_address_map();
         println!("🗑️ PLC config deleted: {}", id);
         Json(json!({"success": true}))
     } else {
@@ -572,6 +643,7 @@ async fn test_plc_connection(Json(plc): Json<PlcConnectionConfig>) -> impl IntoR
 fn generate_toml(config: &PlcConfig) -> String {
     let mut toml = format!(r#"# PLC → AAS Bridge 설정
 # 장비: {}
+line = {}
 
 [plc]
 ip = "{}"
@@ -583,8 +655,9 @@ interval_ms = {}
 [aas]
 server = "{}"
 
-"#, 
+"#,
         config.equipment_id,
+        config.line,
         config.plc.ip,
         config.plc.port,
         config.plc.network,
@@ -596,6 +669,7 @@ server = "{}"
     for m in &config.mappings {
         toml.push_str(&format!(r#"[[mappings]]
 device = "{}"
+sensor_name = "{}"
 aas_submodel = "{}"
 aas_property = "{}"
 data_type = "{}"
@@ -605,6 +679,7 @@ offset = {}
 
 "#,
             m.device,
+            m.sensor_name,
             m.aas_submodel,
             m.aas_property,
             m.data_type,
@@ -615,4 +690,154 @@ offset = {}
     }
 
     toml
+}
+
+// ============ PLC → 장비/센서 매핑 인덱스 ============
+
+fn build_address_map() -> AddressMap {
+    let mut map = AddressMap::new();
+    let entries = match std::fs::read_dir("config/plc") {
+        Ok(e) => e,
+        Err(_) => return map,
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if path.extension().map(|e| e != "json").unwrap_or(true) {
+            continue;
+        }
+        let content = match std::fs::read_to_string(&path) {
+            Ok(c) => c,
+            Err(_) => continue,
+        };
+        let cfg: PlcConfig = match serde_json::from_str(&content) {
+            Ok(c) => c,
+            Err(e) => {
+                eprintln!("⚠️  PLC config 파싱 실패 {:?}: {}", path, e);
+                continue;
+            }
+        };
+        for m in &cfg.mappings {
+            if m.sensor_name.is_empty() {
+                continue;
+            }
+            let key = (cfg.line, m.device.clone());
+            if let Some(prev) = map.insert(key, MappingEntry {
+                equipment_id: cfg.equipment_id.clone(),
+                sensor_name: m.sensor_name.clone(),
+                scale: m.scale,
+                offset: m.offset,
+            }) {
+                eprintln!(
+                    "⚠️  Line {} 주소 {} 중복 매핑: {} → {} (덮어씀)",
+                    cfg.line, m.device, prev.equipment_id, cfg.equipment_id
+                );
+            }
+        }
+    }
+    map
+}
+
+// ============ Kafka Consumer ============
+
+async fn run_kafka_consumer(state: AppState, brokers: String, topics: Vec<String>, group_id: String) {
+    if topics.is_empty() {
+        eprintln!("⚠️  KAFKA_LINES가 비어 있음 — Kafka consumer 비활성");
+        return;
+    }
+    let consumer: StreamConsumer = match ClientConfig::new()
+        .set("bootstrap.servers", &brokers)
+        .set("group.id", &group_id)
+        .set("auto.offset.reset", "latest")
+        .set("enable.auto.commit", "true")
+        .set("auto.commit.interval.ms", "1000")
+        .set("session.timeout.ms", "6000")
+        .set("heartbeat.interval.ms", "2000")
+        .create()
+    {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("⚠️  Kafka consumer 생성 실패: {} (PLC 데이터 수신 비활성)", e);
+            return;
+        }
+    };
+
+    let topic_refs: Vec<&str> = topics.iter().map(|s| s.as_str()).collect();
+    if let Err(e) = consumer.subscribe(&topic_refs) {
+        eprintln!("⚠️  Kafka subscribe 실패: {} (PLC 데이터 수신 비활성)", e);
+        return;
+    }
+
+    println!("✓ Kafka consumer 시작: {:?}", topics);
+
+    loop {
+        match consumer.recv().await {
+            Ok(msg) => {
+                let payload = match msg.payload() {
+                    Some(p) => p,
+                    None => continue,
+                };
+                let s = match std::str::from_utf8(payload) {
+                    Ok(s) => s,
+                    Err(_) => continue,
+                };
+                // 토픽 끝 숫자에서 라인 번호 추출 ("melsec-plc-data-2" → 2)
+                let line: u8 = match msg.topic().rsplit('-').next().and_then(|t| t.parse().ok()) {
+                    Some(n) => n,
+                    None => {
+                        eprintln!("⚠️  토픽에서 라인 번호 추출 실패: {}", msg.topic());
+                        continue;
+                    }
+                };
+                // RawPlcData (실제 PLC 형식)만 처리. PlcData(mock)은 조용히 skip.
+                match serde_json::from_str::<RawPlcMessage>(s) {
+                    Ok(raw) => apply_raw_plc(&state, line, raw).await,
+                    Err(_) => continue,
+                }
+            }
+            Err(e) => {
+                eprintln!("Kafka recv 실패: {}", e);
+                tokio::time::sleep(Duration::from_millis(500)).await;
+            }
+        }
+    }
+}
+
+async fn apply_raw_plc(state: &AppState, line: u8, raw: RawPlcMessage) {
+    let map = state.address_map.read().await;
+    if map.is_empty() {
+        return;
+    }
+    // 한 메시지의 업데이트를 장비별로 묶기 → write lock을 한 번에 잡고 처리
+    let mut per_equipment: HashMap<String, Vec<(String, f64)>> = HashMap::new();
+    for w in &raw.word_data {
+        if let Some(m) = map.get(&(line, w.address.clone())) {
+            let v = (w.value as f64) * m.scale + m.offset;
+            per_equipment
+                .entry(m.equipment_id.clone())
+                .or_default()
+                .push((m.sensor_name.clone(), v));
+        }
+    }
+    drop(map);
+
+    if per_equipment.is_empty() {
+        return;
+    }
+
+    let ts = raw.timestamp.to_rfc3339();
+    let mut data = state.equipment_data.write().await;
+    for (eq_id, updates) in per_equipment {
+        let entry = data.entry(eq_id.clone()).or_insert_with(|| EquipmentData {
+            equipment_id: eq_id.clone(),
+            timestamp: ts.clone(),
+            status: "running".to_string(),
+            sensors: HashMap::new(),
+            alerts: Vec::new(),
+        });
+        entry.timestamp = ts.clone();
+        for (name, val) in updates {
+            entry.sensors.insert(name, val);
+        }
+        entry.alerts = detect_alerts(&entry.sensors);
+    }
 }

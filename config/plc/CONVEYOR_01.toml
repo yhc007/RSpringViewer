@@ -1,0 +1,49 @@
+# PLC → AAS Bridge 설정
+# 장비: CONVEYOR_01
+line = 1
+
+[plc]
+ip = "192.168.0.10"
+port = 4999
+network = 0
+pc = 255
+interval_ms = 1000
+
+[aas]
+server = "http://localhost:8080"
+
+[[mappings]]
+device = "D1000"
+sensor_name = "cycle_time_raw"
+aas_submodel = "OperationalData"
+aas_property = "CycleTimeRaw"
+data_type = "int16"
+scale = 0.1
+offset = 0.0
+
+[[mappings]]
+device = "D1008"
+sensor_name = "input_cv_current"
+aas_submodel = "OperationalData"
+aas_property = "InputConveyorCurrent"
+data_type = "int16"
+scale = 1.0
+offset = 0.0
+
+[[mappings]]
+device = "D1010"
+sensor_name = "input_cv_setpoint"
+aas_submodel = "OperationalData"
+aas_property = "InputConveyorSetpoint"
+data_type = "int16"
+scale = 1.0
+offset = 0.0
+
+[[mappings]]
+device = "D1012"
+sensor_name = "align_scale_value"
+aas_submodel = "OperationalData"
+aas_property = "AlignmentScale"
+data_type = "int16"
+scale = 1.0
+offset = 0.0

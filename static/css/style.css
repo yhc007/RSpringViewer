@@ -18,6 +18,129 @@ body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; b
 .model-item.active { background: #1a2a4a; border-left: 3px solid #00d4ff; }
 .model-item .icon { font-size: 16px; }
 .model-item .size { margin-left: auto; font-size: 11px; color: #666; }
+/* ── Line section (장비 목록 라인별 그룹) ───────────────────────── */
+.line-section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 4px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #1f1f38;
+}
+.line-section-header:first-of-type { margin-top: 4px; }
+.line-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 5px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.45);
+    color: #00d4ff;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    line-height: 1;
+}
+.line-badge-muted {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: #2a2a4a;
+    color: #666;
+}
+.line-label {
+    flex: 1;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #cfd6e0;
+}
+.line-count {
+    font-size: 10px;
+    color: #666;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    padding: 1px 6px;
+    background: #1a1a2e;
+    border-radius: 4px;
+}
+
+/* ── Equipment item ─────────────────────────────────────────────── */
+.equipment-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    margin: 2px 0;
+    border-radius: 5px;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    font-size: 12.5px;
+    color: #d0d4dc;
+    transition: background 0.15s, border-color 0.15s;
+}
+.equipment-item:hover { background: #181830; }
+.equipment-item.active {
+    background: #18243f;
+    border-left-color: #00d4ff;
+    color: #fff;
+}
+.equip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px currentColor;
+}
+.equip-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 9px;
+}
+.equip-count {
+    font-size: 10px;
+    color: #555;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ── AAS list items ─────────────────────────────────────────────── */
+.aas-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    margin: 2px 0;
+    border-radius: 5px;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    font-size: 12px;
+    color: #d0d4dc;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.aas-item:hover { background: #181830; color: #fff; }
+.aas-item.active {
+    background: #18243f;
+    border-left-color: #00d4ff;
+    color: #fff;
+}
+.aas-item-icon { color: #00d4ff; flex-shrink: 0; }
+.aas-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.aas-empty {
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #666;
+}
+
 .part-tree { margin-top: 16px; }
 .part-item { padding: 6px 12px; font-size: 12px; display: flex; align-items: center; gap: 6px; cursor: pointer; border-radius: 4px; transition: background 0.2s; }
 .part-item:hover { background: #1a1a3a; }
